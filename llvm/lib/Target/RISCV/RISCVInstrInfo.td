@@ -1678,6 +1678,7 @@ def : Pat<(binop_allwusers<add> GPR:$rs1, (AddiPair:$rs2)),
 
 include "RISCVInstrInfoM.td"
 include "RISCVInstrInfoA.td"
+include "RISCVInstrInfoB.td"
 include "RISCVInstrInfoF.td"
 include "RISCVInstrInfoD.td"
 include "RISCVInstrInfoC.td"
