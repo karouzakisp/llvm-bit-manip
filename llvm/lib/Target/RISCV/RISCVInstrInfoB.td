@@ -48,9 +48,9 @@ class ext_ir<bits<3> funct3, string opcodestr>
          (ADDSL GPR:$rs1, GPR:$rs2, uimm2_node:$uimm2)>;
 
     
-  def : Pat<(sext_inreg GPR:$rs1,  0xff) , (EXT GPR:$rs1, 7, 0)>;
-  def : Pat<(sext_inreg GPR:$rs1,  0xffff) , (EXT GPR:$rs1, 16, 0)>;
-  def : Pat<(sext_inreg GPR:$rs1,  0xffffffff) , (EXT GPR:$rs1, 32, 0)>;
+  def : Pat<(sext_inreg GPR:$rs1,  i8) , (EXT GPR:$rs1, 7, 0)>;
+  def : Pat<(sext_inreg GPR:$rs1,  i16) , (EXT GPR:$rs1, 16, 0)>;
+  def : Pat<(sext_inreg GPR:$rs1,  i32) , (EXT GPR:$rs1, 32, 0)>;
 
 
 
