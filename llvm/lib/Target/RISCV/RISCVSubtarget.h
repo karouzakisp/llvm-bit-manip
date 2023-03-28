@@ -44,6 +44,10 @@ private:
 
   RISCVProcFamilyEnum RISCVProcFamily = Others;
 
+  bool HasStdExtBa = false;
+  bool HasStdExtBb = false;
+  bool HasStdExtBs = false;
+
   bool HasStdExtM = false;
   bool HasStdExtA = false;
   bool HasStdExtF = false;
@@ -147,6 +151,11 @@ public:
   /// and preferably modeled with SubtargetFeatures or properties in
   /// initializeProperties().
   RISCVProcFamilyEnum getProcFamily() const { return RISCVProcFamily; }
+
+  bool hasStdExtBa() const { return HasStdExtBa; }
+  bool hasStdExtBb() const { return HasStdExtBb; }
+  bool hasStdExtBs() const { return HasStdExtBs; }
+
 
   bool hasStdExtM() const { return HasStdExtM; }
   bool hasStdExtA() const { return HasStdExtA; }
