@@ -340,6 +340,16 @@ def FeatureStdExtZk
                         FeatureStdExtZkr,
                         FeatureStdExtZkt]>;
 
+def FeatureStdExtBa
+    : SubtargetFeature<"xtheadba", "HasStdExtBa", "true", 
+                       "'xtheadba' (Address Generation Extension)">;
+def FeatureStdExtBb
+    : SubtargetFeature<"xtheadbb", "HasStdExtBb", "true", 
+                       "'xtheadbb' (Basic bit Manipulation Extension)">;
+def FeatureStdExtBc
+    : SubtargetFeature<"xtheadbs", "HasStdExtBs", "true", 
+                       "'xtheadbs' (Single bit Instructions Extension)">;
+
 def FeatureNoRVCHints
     : SubtargetFeature<"no-rvc-hints", "EnableRVCHintInstrs", "false",
                        "Disable RVC Hint Instructions.">;
