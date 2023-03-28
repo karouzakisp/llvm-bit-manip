@@ -343,6 +343,20 @@ RISCVTargetLowering::RISCVTargetLowering(const TargetMachine &TM,
       setOperationAction(ISD::FPOWI, MVT::i32, Custom);
   }
 
+  // TODO DIFF sub target is 64 BIT
+  if (Subtarget.hasStdExtBb()  ){
+    setOperationAction(ISD::CTLZ, XLenVT, Legal);
+    setOperationAction(ISD::BSWAP, XLenVT, Legal);
+    setOperationAction(ISD::XOR, XLenVT, Legal);
+    setOperationAction(ISD::SELECT, XLenVT, Legal);
+    setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i16, Legal);
+    setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i8, Legal);
+    setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i1, Legal);
+    setOperationAction(ISD::ROTL, XLenVT, Legal);
+    setOperationAction(ISD::ROTR, XLenVT, Legal);
+
+  }
+
   if (Subtarget.hasStdExtF()) {
     setOperationAction(FPLegalNodeTypes, MVT::f32, Legal);
     setCondCodeAction(FPCCToExpand, MVT::f32, Expand);
