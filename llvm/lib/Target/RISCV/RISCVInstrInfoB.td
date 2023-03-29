@@ -84,7 +84,8 @@ let hasSideEffects = 0, mayLoad = 0, mayStore = 0 in
     def : Pat<(add (add GPR:$rs1, (shl GPR:$rs2, (XLenVT i ))),(shl GPR:$rs2, (XLenVT i))),
               (ADDSL GPR:$rs1, GPR:$rs2, (ImmPlus1 (XLenVT i)))>;
   }
-    
+   
+  def : Pat<(sext_inreg GPR:$rs1, i1) , (EXT GPR:$rs1, 0, 0)>; 
   def : Pat<(sext_inreg GPR:$rs1,  i8) , (EXT GPR:$rs1, 7, 0)>;
   def : Pat<(sext_inreg GPR:$rs1,  i16) , (EXT GPR:$rs1, 15, 0)>;
   
@@ -98,12 +99,13 @@ let hasSideEffects = 0, mayLoad = 0, mayStore = 0 in
      
   def : Pat<(bswap GPR:$rs1), (REV GPR:$rs1 ) >;
   
-  // def : Pat<(OR ( SRL 8, i16:$rs1), (SLL 8, i16:$rs1 ) ), (REV i16:$rs1 ) >;
+  def : Pat<(or ( srl i16:$rs1, (i64 8) ), (shl i16:$rs1, (i64 8) ) )  , (REV i16:$rs1 ) >;
 
-  // def : Pat<(OR ( AND (SRL 24, i32:$rs1 ), 0xff), 
-  //              (AND (SLL 8, i32:$rs1  ), 0xff0000 ),
-  //              (AND (SRL 8, i32:$rs1  ), 0xff00),  
-  //              (AND (SLL 24, i32:$rs1 ), 0xff000000)), (REV i32:$rs1 )>;
+//   def : Pat<(or (and 0xff, (srl i32:$rs1, (i64 24))), 
+//                 (and 0xff0000, (shl i32:$rs1 ,  (i64 8))) ,
+//                 (and 0xff00, (srl i32:$rs1 ,  (i64 8))),  
+//                 (and 0xff000000, (shl i32:$rs1 ,  (i64 24)))), 
+//                 (REV i32:$rs1 )>;
 
   def : Pat<(srl ( bswap i64:$rs1), (i64 32 )) , (REVW i64:$rs1 ) >;
   
