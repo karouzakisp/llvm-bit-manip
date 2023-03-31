@@ -18,8 +18,15 @@ class addsl_ir<bits<3> funct3,string opcodestr>
 			(ins GPR:$rs1, GPR:$rs2, uimm2:$uimm2), opcodestr,
 			"$rd, $rs1, $rs2, $uimm2">{
   bits<2> uimm2;
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rd;
   let Inst{31-27} = 0;
   let Inst{26-25} = uimm2;
+  let Inst{24-20} = rs2;
+  let Inst{19-15} = rs1;
+  let Inst{14-12} = 0x1;
+  let Inst{11-7} = rd; 
 }
 
 
