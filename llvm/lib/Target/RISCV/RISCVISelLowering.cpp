@@ -343,12 +343,14 @@ RISCVTargetLowering::RISCVTargetLowering(const TargetMachine &TM,
       setOperationAction(ISD::FPOWI, MVT::i32, Custom);
   }
 
-  // TODO DIFF sub target is 64 BIT
   if (Subtarget.hasStdExtBb()  ){
     setOperationAction(ISD::CTLZ, XLenVT, Legal);
     setOperationAction(ISD::BSWAP, XLenVT, Legal);
     setOperationAction(ISD::XOR, XLenVT, Legal);
     setOperationAction(ISD::SELECT, XLenVT, Legal);
+    if(Subtarget.is64Bit())
+      setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i32, Legal);
+
     setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i16, Legal);
     setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i8, Legal);
     setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i1, Legal);
@@ -1166,8 +1168,11 @@ bool RISCVTargetLowering::hasAndNotCompare(SDValue Y) const {
 }
 
 bool RISCVTargetLowering::hasBitTest(SDValue X, SDValue Y) const {
-  // We can use ANDI+SEQZ/SNEZ as a bit test. Y contains the bit position.
   auto *C = dyn_cast<ConstantSDNode>(Y);
+  if (Subtarget.hasStdExtBs())
+    return C != nullptr;
+
+  // We can use ANDI+SEQZ/SNEZ as a bit test. Y contains the bit position.
   return C && C->getAPIntValue().ule(10);
 }
 

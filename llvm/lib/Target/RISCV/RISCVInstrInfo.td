@@ -78,7 +78,6 @@ def riscv_write_csr : SDNode<"RISCVISD::WRITE_CSR", SDT_RISCVWriteCSR,
                              [SDNPHasChain]>;
 def riscv_swap_csr  : SDNode<"RISCVISD::SWAP_CSR", SDT_RISCVSwapCSR,
                              [SDNPHasChain]>;
-def riscv_rorw   : SDNode<"RISCVISD::RORW",   SDT_RISCVIntBinOpW>;
 
 
 def riscv_read_cycle_wide : SDNode<"RISCVISD::READ_CYCLE_WIDE",
@@ -183,11 +182,17 @@ def uimmlog2xlen : Operand<XLenVT>, ImmLeaf<XLenVT, [{
   let OperandNamespace = "RISCVOp";
 }
 
-def uimm2 : Operand<XLenVT> {
+def uimm2 : Operand<XLenVT>, ImmLeaf<XLenVT, [{return isUInt<2>(Imm);}]> {
   let ParserMatchClass = UImmAsmOperand<2>;
   let DecoderMethod = "decodeUImmOperand<2>";
   let OperandType = "OPERAND_UIMM2";
   let OperandNamespace = "RISCVOp";
+  let MCOperandPredicate = [{
+    int64_t Imm;
+    if(!MCOp.evaluateAsConstantImm(Imm))
+      return false;
+    return isUInt<2>(Imm);
+  }];
 }
 
 def uimm3 : Operand<XLenVT> {
@@ -1680,7 +1685,6 @@ def : Pat<(binop_allwusers<add> GPR:$rs1, (AddiPair:$rs2)),
 
 include "RISCVInstrInfoM.td"
 include "RISCVInstrInfoA.td"
-include "RISCVInstrInfoB.td"
 include "RISCVInstrInfoF.td"
 include "RISCVInstrInfoD.td"
 include "RISCVInstrInfoC.td"
@@ -1689,3 +1693,6 @@ include "RISCVInstrInfoZk.td"
 include "RISCVInstrInfoV.td"
 include "RISCVInstrInfoZfh.td"
 include "RISCVInstrInfoZicbo.td"
+
+// thead-ba-bb-bs extensions
+include "RISCVInstrInfoB.td"

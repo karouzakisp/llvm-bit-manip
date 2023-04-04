@@ -660,7 +660,7 @@ void RISCVDAGToDAGISel::Select(SDNode *Node) {
 
     // Optimize (srl (and X, C2), C) -> (slli (srliw X, C3), C3-C) where C2 has
     // 32 leading zeros and C3 trailing zeros.
-    if (isShiftedMask_64(Mask)) {
+    if (isShiftedMask_64(Mask) ) {
       unsigned XLen = Subtarget->getXLen();
       unsigned LeadingZeros = XLen - (64 - countLeadingZeros(Mask));
       unsigned TrailingZeros = countTrailingZeros(Mask);
@@ -814,8 +814,10 @@ void RISCVDAGToDAGISel::Select(SDNode *Node) {
         bool Skip = Subtarget->hasStdExtZba() && Leading == 32 &&
                     X.getOpcode() == ISD::SIGN_EXTEND_INREG &&
                     cast<VTSDNode>(X.getOperand(1))->getVT() == MVT::i32;
-        // Also Skip if we can use bexti.
-        Skip |= Subtarget->hasStdExtZbs() && Leading == XLen - 1;
+        // Also Skip if we can use bexti or tst.
+        Skip |= (Subtarget->hasStdExtZbs() | Subtarget->hasStdExtBs()) && 
+                  Leading == XLen - 1;
+      
         if (OneUseOrZExtW && !Skip) {
           SDNode *SLLI = CurDAG->getMachineNode(
               RISCV::SLLI, DL, VT, X,

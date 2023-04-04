@@ -343,12 +343,23 @@ def FeatureStdExtZk
 def FeatureStdExtBa
     : SubtargetFeature<"xtheadba", "HasStdExtBa", "true", 
                        "'xtheadba' (Address Generation Extension)">;
+def HasStdExtBa : Predicate<"Subtarget->hasStdExtBa()">,
+                           AssemblerPredicate<(all_of FeatureStdExtBa),
+                           "'xtheadba' (Address Generation Extension)">;
+
 def FeatureStdExtBb
     : SubtargetFeature<"xtheadbb", "HasStdExtBb", "true", 
                        "'xtheadbb' (Basic bit Manipulation Extension)">;
-def FeatureStdExtBc
+def HasStdExtBb : Predicate<"Subtarget->hasStdExtBb()">,
+                           AssemblerPredicate<(all_of FeatureStdExtBb),
+                           "'xtheadbb' (Basic bit Manipulation Extension)">;
+
+def FeatureStdExtBs
     : SubtargetFeature<"xtheadbs", "HasStdExtBs", "true", 
                        "'xtheadbs' (Single bit Instructions Extension)">;
+def HasStdExtBs : Predicate<"Subtarget->hasStdExtBs()">,
+                           AssemblerPredicate<(all_of FeatureStdExtBs),
+                           "'xtheadbs' (Basic bit Manipulation Extension)">;
 
 def FeatureNoRVCHints
     : SubtargetFeature<"no-rvc-hints", "EnableRVCHintInstrs", "false",
