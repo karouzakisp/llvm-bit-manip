@@ -815,7 +815,7 @@ void RISCVDAGToDAGISel::Select(SDNode *Node) {
                     X.getOpcode() == ISD::SIGN_EXTEND_INREG &&
                     cast<VTSDNode>(X.getOperand(1))->getVT() == MVT::i32;
         // Also Skip if we can use bexti or tst.
-        Skip |= (Subtarget->hasStdExtZbs() | Subtarget->hasStdExtBs()) && 
+        Skip |= (Subtarget->hasStdExtZbs() || Subtarget->hasStdExtBs()) && 
                   Leading == XLen - 1;
       
         if (OneUseOrZExtW && !Skip) {
