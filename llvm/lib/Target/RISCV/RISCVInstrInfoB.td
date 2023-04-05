@@ -165,7 +165,6 @@ let Predicates = [IsRV64, HasStdExtBb] in {
   
 } // Predicates = [IsRV64, HasStdExtbb]
 
-  // #TODO test
   let Predicates = [HasStdExtBs] in { 
       def : Pat<(and (srl GPR:$rs1, uimmlog2xlen:$shamt), 1 ), 
                 (TST GPR:$rs1, uimmlog2xlen:$shamt)>;

@@ -461,4 +461,43 @@ define signext i32 @rorw(i32 %a, i32 %b){
   ret i32 %rorw
 }
 
+define i64 @addsl_example(i64* %a, i64 %b){
+; THEADC64-LABEL: addsl_example:
+; THEADC64:       # %bb.0:
+; THEADC64-NEXT:    addsl a0, a0, a1, 3
+; THEADC64-NEXT:    ld a0, 0(a0)
+; THEADC64-NEXT:    add a0, a0, a0
+; THEADC64-NEXT:    ret
+  %ptr = getelementptr i64, i64* %a, i64 %b
+  %val = load i64, i64* %ptr, align 8
+  %dval = add i64 %val, %val
+  ret i64 %dval
+}
 
+
+define i64 @test_extu_again(i32 %0, i32 %1 ){
+; THEADC64-LABEL: test_extu_again:
+; THEADC64:       # %bb.0:
+; THEADC64-NEXT:    addi sp, sp, -16
+; THEADC64-NEXT:    .cfi_def_cfa_offset 16
+; THEADC64-NEXT:    sw a0, 12(sp)
+; THEADC64-NEXT:    sw a1, 8(sp)
+; THEADC64-NEXT:    add a0, a0, a1
+; THEADC64-NEXT:    extu a0, a0, 31, 0
+; THEADC64-NEXT:    sd a0, 0(sp)
+; THEADC64-NEXT:    addi sp, sp, 16
+; THEADC64-NEXT:    ret
+ %3 = alloca i32, align 4
+  %4 = alloca i32, align 4
+  %5 = alloca i64, align 8
+  store i32 %0, i32* %3, align 4
+  store i32 %1, i32* %4, align 4
+  %6 = load i32, i32* %3, align 4
+  %7 = load i32, i32* %4, align 4
+  %8 = add i32 %6, %7
+  %9 = zext i32 %8 to i64
+  store i64 %9, i64* %5, align 8
+  %10 = load i64, i64* %5, align 8
+  ret i64 %10
+
+}
