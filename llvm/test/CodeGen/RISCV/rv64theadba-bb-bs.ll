@@ -340,6 +340,7 @@ define i64 @tst_i64(i64 %a){
   ret i64 %and
 }
 
+
 define i64 @revw_i64(i64 %a){
 ; CHECK-LABEL: revw_i64:
 ; CHECK:       # %bb.0:
@@ -360,12 +361,11 @@ define i64 @revw_i64(i64 %a){
 ; CHECK-NEXT:    ret
 ; THEADC64-LABEL: revw_i64:
 ; THEADC64:       # %bb.0:
-; THEADC64-NEXT:    rev a0, a0
-; THEADC64-NEXT:    srli a0, a0, 32
+; THEADC64-NEXT:    revw a0, a0
 ; THEADC64-NEXT:    ret
   %bswap = call i64 @llvm.bswap.i64(i64 %a)
-  %srl = lshr i64 %bswap, 32
-  ret i64 %srl
+  %sra = ashr i64 %bswap, 32
+  ret i64 %sra
 }
 declare i64 @llvm.fshr.i64(i64 %a, i64 %b, i64 %c)
 declare i64 @llvm.fshl.i64(i64 , i64 , i64 )

@@ -348,8 +348,13 @@ RISCVTargetLowering::RISCVTargetLowering(const TargetMachine &TM,
     setOperationAction(ISD::BSWAP, XLenVT, Legal);
     setOperationAction(ISD::XOR, XLenVT, Legal);
     setOperationAction(ISD::SELECT, XLenVT, Legal);
-    if(Subtarget.is64Bit())
+    
+    setOperationAction({ISD::FSHL, ISD::FSHR}, XLenVT, Custom);
+
+    if (Subtarget.is64Bit()){
+      setOperationAction({ISD::FSHL, ISD::FSHR}, MVT::i32, Custom);
       setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i32, Legal);
+    }
 
     setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i16, Legal);
     setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i8, Legal);
@@ -4866,6 +4871,10 @@ SDValue RISCVTargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
     EVT PtrVT = getPointerTy(DAG.getDataLayout());
     return DAG.getRegister(RISCV::X4, PtrVT);
   }
+  case Intrinsic::riscv_tstnbz:{
+    unsigned Opc = llvm::RISCV::TSTNBZ;
+    return DAG.getNode(Opc, DL, XLenVT, Op.getOperand(1)); 
+  }
   case Intrinsic::riscv_orc_b:
   case Intrinsic::riscv_brev8: {
     // Lower to the GORCI encoding for orc.b or the GREVI encoding for brev8.
@@ -7200,7 +7209,8 @@ void RISCVTargetLowering::ReplaceNodeResults(SDNode *N,
   case ISD::FSHL:
   case ISD::FSHR: {
     assert(N->getValueType(0) == MVT::i32 && Subtarget.is64Bit() &&
-           Subtarget.hasStdExtZbt() && "Unexpected custom legalisation");
+           (Subtarget.hasStdExtZbt() || Subtarget.hasStdExtBb )
+           && "Unexpected custom legalisation");
     SDValue NewOp0 =
         DAG.getNode(ISD::ANY_EXTEND, DL, MVT::i64, N->getOperand(0));
     SDValue NewOp1 =
