@@ -150,8 +150,8 @@ class shiftW_ir<bits<7> funct7, bits<3> funct3, string opcodestr>
               (OR (SLL i32:$rs1, GPR:$rs2),
                (SRL i32:$rs1, (SUB 32, GPR:$rs2)))>;
 
-    def : PatGpr<int_riscv_tstnbz, TSTNBZ>; 
-    def : PatGpr<riscv_tstnbz, TSTNBZ>;
+    def : PatGprGpr<int_riscv_tstnbz, TSTNBZ>; 
+    def : PatGprGpr<riscv_tstnbz, TSTNBZ>;
 
   } // Predicates = [HasStdExtBb] 
 

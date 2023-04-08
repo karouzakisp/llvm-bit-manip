@@ -72,7 +72,7 @@ let TargetPrefix = "riscv" in {
 let TargetPrefix = "riscv" in {
   def int_riscv_tstnbz 
       : Intrinsic<[llvm_any_ty], 
-                  [LLVMMatchType<0>],
+                  [LLVMMatchType<0>, LLVMMatchType<0>],
                   [IntrNoMem, IntrSpeculatable, IntrWillReturn]>; 
 } // TargetPrefix == "riscv"
 
