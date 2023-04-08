@@ -67,12 +67,12 @@ let TargetPrefix = "riscv" in {
 
 } // TargetPrefix = "riscv"
 
-//===----------------------------------------------------------------------===// basic Bit Manipulation extension THeadBb
-
+//===----------------------------------------------------------------------===// 
+// THeadBb basic Bit Manipulation extension 
 let TargetPrefix = "riscv" in {
   def int_riscv_tstnbz 
       : Intrinsic<[llvm_any_ty], 
-                  [LLVMMatchType<0>, LLVMMatchType<0>],
+                  [LLVMMatchType<0>],
                   [IntrNoMem, IntrSpeculatable, IntrWillReturn]>; 
 } // TargetPrefix == "riscv"
 

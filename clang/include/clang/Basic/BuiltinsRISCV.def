@@ -15,9 +15,9 @@
 #   define TARGET_BUILTIN(ID, TYPE, ATTRS, FEATURE) BUILTIN(ID, TYPE, ATTRS)
 #endif
 
-// Bb extension
-TARGET_BUILTIN(__builtin_riscv_tstnbz_64, "LiLi", "ncU", "ba,64bit")
-TARGET_BUILTIN(__builtin_riscv_tstnbz_32, "LiLi", "ncU", "ba")
+// TheadBb extension
+TARGET_BUILTIN(__builtin_riscv_tstnbz_64, "WiWi", "ncU", "theadbb,64bit")
+TARGET_BUILTIN(__builtin_riscv_tstnbz_32, "ZiZi", "ncU", "theadbb")
 
 // Zbb extension
 TARGET_BUILTIN(__builtin_riscv_orc_b_32, "ZiZi", "nc", "zbb")
