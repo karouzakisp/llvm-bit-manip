@@ -4872,7 +4872,7 @@ SDValue RISCVTargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
     return DAG.getRegister(RISCV::X4, PtrVT);
   }
   case Intrinsic::riscv_tstnbz:{
-    unsigned Opc = llvm::RISCV::TSTNBZ;
+    unsigned Opc = RISCVISD::TSTNBZ;
     return DAG.getNode(Opc, DL, XLenVT, Op.getOperand(1)); 
   }
   case Intrinsic::riscv_orc_b:
@@ -7299,6 +7299,19 @@ void RISCVTargetLowering::ReplaceNodeResults(SDNode *N,
     default:
       llvm_unreachable(
           "Don't know how to custom type legalize this intrinsic!");
+    case Intrinsic::riscv_tstnbz:{
+      MVT VT = N->getSimpleValueType(0);
+      MVT XLenVT = Subtarget.getXLenVT();
+      assert((VT == MVT::i8 || VT == MVT::i16 || 
+              (MVT::i32 && Subtarget.is64Bit())) &&
+             Subtarget.hasStdExtBb() && "Unexpected custom legalisation");
+      SDValue NewOp0 = DAG.getNode(ISD::ANY_EXTEND, DL, XLenVT, N->getOperand(0));
+      SDValue TSTNBZ = DAG.getNode(RISCVISD::TSTNBZ, DL, XLenVT, NewOp0);
+      // ReplaceNodeResults requires we maintain the same type for the return
+      // value.
+      Results.push_back(DAG.getNode(ISD::TRUNCATE, DL, VT, TSTNBZ));
+      break;
+    }
     case Intrinsic::riscv_grev:
     case Intrinsic::riscv_gorc: {
       assert(N->getValueType(0) == MVT::i32 && Subtarget.is64Bit() &&
@@ -11675,6 +11688,7 @@ const char *RISCVTargetLowering::getTargetNodeName(unsigned Opcode) const {
   NODE_NAME_CASE(GREV)
   NODE_NAME_CASE(GREVW)
   NODE_NAME_CASE(GORC)
+  NODE_NAME_CASE(TSTNBZ)
   NODE_NAME_CASE(GORCW)
   NODE_NAME_CASE(SHFL)
   NODE_NAME_CASE(SHFLW)

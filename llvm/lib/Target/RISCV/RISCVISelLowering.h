@@ -129,6 +129,11 @@ enum NodeType : unsigned {
   SHFLW,
   UNSHFL,
   UNSHFLW,
+  // Generalized reverse byte operation - directly matching of the named 
+  // RISC-V instructions. Lowered as custom nodes. All operands are i32
+  // or XLenVT. Each node takes an input operand and outputs a
+  // byte-manipulated version of input.
+  TSTNBZ,
   // Bit Compress/Decompress implement the generic bit extract and bit deposit
   // functions. This operation is also referred to as bit gather/scatter, bit
   // pack/unpack, parallel extract/deposit, compress/expand, or right

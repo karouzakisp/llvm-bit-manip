@@ -7,7 +7,7 @@
 //===--------------------------------------------------------------------------
 
 
-def riscv_tstnbz  : SDNode<"llvm::RISCV::TSTNBZ", SDTUnaryOp>;
+def riscv_tstnbz  : SDNode<"RISCVISD::TSTNBZ", SDTUnaryOp>;
 
 
 
