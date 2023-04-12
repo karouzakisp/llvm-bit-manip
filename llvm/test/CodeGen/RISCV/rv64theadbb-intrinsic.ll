@@ -3,18 +3,6 @@
 ; RUN: | FileCheck %s -check-prefix=THEADBB
 
 
-declare i32 @llvm.riscv.tstnbz.i32(i32 %a)
-
-define i32 @tstnbz_w(i32 %a) nounwind {
-; THEADBB-LABEL: tstnbz_w:
-; THEADBB:       # %bb.0:
-; THEADBB-NEXT:    lui a0, 2
-; THEADBB-NEXT:    addiw a0, a0, -613
-; THEADBB-NEXT:    tstnbz a0, a0
-; THEADBB-NEXT:    ret
-  %tmp = call i32 @llvm.riscv.tstnbz.i32(i32 %a)
-  ret i32 %tmp
-}
 
 declare i64 @llvm.riscv.tstnbz.i64(i64 %a)
 

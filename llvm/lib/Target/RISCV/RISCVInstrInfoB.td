@@ -114,7 +114,7 @@ class shiftW_ir<bits<7> funct7, bits<3> funct3, string opcodestr>
     def : Pat<(and GPR:$rs1, 0xff), (EXTU GPR:$rs1, 7, 0)>;
     def : Pat<(and GPR:$rs1, 0xffff), (EXTU GPR:$rs1, 15, 0)>;
 
-    foreach i = 1...12 in {
+    foreach i = 1...14 in {
        def : Pat<(and (shl GPR:$rs1, (XLenVT i)), 0xffff ),
                 (EXTU GPR:$rs1, 15, (XLenVT i))>;
     }
@@ -168,7 +168,7 @@ let Predicates = [IsRV64, HasStdExtBb] in {
             (OR (SLL GPR:$rs1, GPR:$rs2),
              (SRL GPR:$rs1, (SUB 64, GPR:$rs2)))>;
   
-  def : InstAlias<"rorw $rd, $rs1, $shamt",
+  def : InstAlias<"srriw $rd, $rs1, $shamt",
                 (SRRIW GPR:$rd, GPR:$rs1, uimm5:$shamt), 0>;  
  
   def : PatGprImm<riscv_rorw, SRRIW, uimm5>; 

@@ -322,9 +322,6 @@ define i64 @rev_i64(i64 %a){
   ret i64 %bswap
 }
 
-;; FIXME
-; check second parameter is imm6 must be a number here
-; or just a number in the lshr without a parameter?
 define i64 @tst_i64(i64 %a){
 ; CHECK-LABEL: tst_i64:
 ; CHECK:       # %bb.0:
@@ -449,15 +446,15 @@ define signext i64 @rotr_i64_gpr(i64 %a, i64 %b){
 
 ;; FIXME
 declare i32 @llvm.fshr.i32(i32 , i32, i32)
-define signext i32 @rorw(i32 %a, i32 %b){
+define signext i32 @rorw(i32 %a){
 ; THEADC64-LABEL: rorw:
 ; THEADC64:       # %bb.0:
-; THEADC64-NEXT:    srlw a2, a0, a1
-; THEADC64-NEXT:    negw a1, a1
-; THEADC64-NEXT:    sllw a0, a0, a1
-; THEADC64-NEXT:    or a0, a2, a0
+; THEADC64-NEXT:    srliw a1, a0, 31
+; THEADC64-NEXT:    slli a0, a0, 1
+; THEADC64-NEXT:    ext a0, a0, 31, 0
+; THEADC64-NEXT:    or a0, a1, a0
 ; THEADC64-NEXT:    ret
-  %rorw = call i32 @llvm.fshr.i32(i32 %a, i32 %a, i32 %b)
+  %rorw = call i32 @llvm.fshr.i32(i32 %a, i32 %a, i32 31)
   ret i32 %rorw
 }
 

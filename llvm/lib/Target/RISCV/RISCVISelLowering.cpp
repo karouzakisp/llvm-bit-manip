@@ -347,20 +347,24 @@ RISCVTargetLowering::RISCVTargetLowering(const TargetMachine &TM,
     setOperationAction(ISD::CTLZ, XLenVT, Legal);
     setOperationAction(ISD::BSWAP, XLenVT, Legal);
     setOperationAction(ISD::XOR, XLenVT, Legal);
-    setOperationAction(ISD::SELECT, XLenVT, Legal);
     
     setOperationAction({ISD::FSHL, ISD::FSHR}, XLenVT, Custom);
+
 
     if (Subtarget.is64Bit()){
       setOperationAction({ISD::FSHL, ISD::FSHR}, MVT::i32, Custom);
       setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i32, Legal);
+      setOperationAction(ISD::ROTL, MVT::i32, Legal);
+      setOperationAction(ISD::ROTR, MVT::i32, Legal);
+    }else{
+      setOperationAction(ISD::ROTL, XLenVT, Legal);
+      setOperationAction(ISD::ROTR, XLenVT, Legal);
     }
 
     setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i16, Legal);
     setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i8, Legal);
     setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i1, Legal);
-    setOperationAction(ISD::ROTL, XLenVT, Legal);
-    setOperationAction(ISD::ROTR, XLenVT, Legal);
+    
 
   }
 
@@ -7209,7 +7213,7 @@ void RISCVTargetLowering::ReplaceNodeResults(SDNode *N,
   case ISD::FSHL:
   case ISD::FSHR: {
     assert(N->getValueType(0) == MVT::i32 && Subtarget.is64Bit() &&
-           (Subtarget.hasStdExtZbt() || Subtarget.hasStdExtBb )
+           (Subtarget.hasStdExtZbt() || Subtarget.hasStdExtBb() )
            && "Unexpected custom legalisation");
     SDValue NewOp0 =
         DAG.getNode(ISD::ANY_EXTEND, DL, MVT::i64, N->getOperand(0));

@@ -675,7 +675,6 @@ void RISCVDAGToDAGISel::Select(SDNode *Node) {
         return;
       }
     }
-
     // Optimize (srl (and X, C2), C) ->
     //          (srli (slli X, (XLen-C3), (XLen-C3) + C)
     // Where C2 is a mask with C3 trailing ones.
@@ -2103,7 +2102,7 @@ bool RISCVDAGToDAGISel::selectSHXADDOp(SDValue N, unsigned ShAmt,
         // Look for (srl (and X, Mask), C1) where Mask has 32 leading zeros and
         // C3 trailing zeros. If C3-C1==ShAmt we can use SRLIW+SHXADD.
         if (!LeftShift && Leading == 32 && Trailing > C1 &&
-            (Trailing - C1) == ShAmt) {
+            (Trailing - C1) == ShAmt ) {
           SDLoc DL(N);
           EVT VT = N.getValueType();
           Val = SDValue(CurDAG->getMachineNode(
