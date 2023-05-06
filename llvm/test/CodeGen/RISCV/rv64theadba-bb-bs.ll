@@ -370,7 +370,9 @@ declare i64 @llvm.fshl.i64(i64 , i64 , i64 )
 define i64 @rotr_i64_imm6(i64 %a){
 ; THEADC64-LABEL: rotr_i64_imm6:
 ; THEADC64:       # %bb.0:
-; THEADC64-NEXT:    srri a0, a0, 59
+; THEADC64-NEXT:    slli a1, a0, 5
+; THEADC64-NEXT:    srli a0, a0, 59
+; THEADC64-NEXT:    or a0, a0, a1
 ; THEADC64-NEXT:    ret
   %rotr = call i64 @llvm.fshr.i64(i64 %a, i64 %a, i64 59)
   ret i64 %rotr
@@ -379,7 +381,9 @@ define i64 @rotr_i64_imm6(i64 %a){
 define i64 @rotl_i64_imm6(i64 %a){
 ; THEADC64-LABEL: rotl_i64_imm6:
 ; THEADC64:       # %bb.0:
-; THEADC64-NEXT:    srri a0, a0, 5
+; THEADC64-NEXT:    srli a1, a0, 5
+; THEADC64-NEXT:    slli a0, a0, 59
+; THEADC64-NEXT:    or a0, a0, a1
 ; THEADC64-NEXT:    ret
   %rotl = call i64 @llvm.fshl.i64(i64 %a, i64 %a, i64 59)
   ret i64 %rotl
@@ -389,7 +393,9 @@ define i64 @rotl_i64_imm6(i64 %a){
 define i64 @rotr_i64_imm5(i64 %a){
 ; THEADC64-LABEL: rotr_i64_imm5:
 ; THEADC64:       # %bb.0:
-; THEADC64-NEXT:    srri a0, a0, 31
+; THEADC64-NEXT:    slli a1, a0, 33
+; THEADC64-NEXT:    srli a0, a0, 31
+; THEADC64-NEXT:    or a0, a0, a1
 ; THEADC64-NEXT:    ret
   %rotr = call i64 @llvm.fshr.i64(i64 %a, i64 %a, i64 31)
   ret i64 %rotr
@@ -398,7 +404,9 @@ define i64 @rotr_i64_imm5(i64 %a){
 define i64 @rotl_i64_imm5(i64 %a){
 ; THEADC64-LABEL: rotl_i64_imm5:
 ; THEADC64:       # %bb.0:
-; THEADC64-NEXT:    srri a0, a0, 33
+; THEADC64-NEXT:    srli a1, a0, 33
+; THEADC64-NEXT:    slli a0, a0, 31
+; THEADC64-NEXT:    or a0, a0, a1
 ; THEADC64-NEXT:    ret
   %rotl = call i64 @llvm.fshl.i64(i64 %a, i64 %a, i64 31)
   ret i64 %rotl
@@ -417,7 +425,7 @@ define i64 @rotl_i64_gpr(i64 %a, i64 %b){
 ; THEADC64-LABEL: rotl_i64_gpr:
 ; THEADC64:       # %bb.0:
 ; THEADC64-NEXT:    sll a2, a0, a1
-; THEADC64-NEXT:    sub a1, 64, a1
+; THEADC64-NEXT:    neg a1, a1
 ; THEADC64-NEXT:    srl a0, a0, a1
 ; THEADC64-NEXT:    or a0, a2, a0
 ; THEADC64-NEXT:    ret
@@ -436,7 +444,7 @@ define signext i64 @rotr_i64_gpr(i64 %a, i64 %b){
 ; THEADC64-LABEL: rotr_i64_gpr:
 ; THEADC64:       # %bb.0:
 ; THEADC64-NEXT:    srl a2, a0, a1
-; THEADC64-NEXT:    sub a1, 64, a1
+; THEADC64-NEXT:    neg a1, a1
 ; THEADC64-NEXT:    sll a0, a0, a1
 ; THEADC64-NEXT:    or a0, a2, a0
 ; THEADC64-NEXT:    ret
