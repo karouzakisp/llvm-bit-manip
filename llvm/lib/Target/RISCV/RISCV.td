@@ -525,7 +525,7 @@ include "RISCVSchedSiFive7.td"
 //===----------------------------------------------------------------------===//
 
 def : ProcessorModel<"generic-rv32", NoSchedModel, []>;
-def : ProcessorModel<"generic-rv64", NoSchedModel, [Feature64Bit]>;
+def : ProcessorModel<"generic-rv64", NoSchedModel, [Feature64Bit], [FeatureStdExtBa, FeatureStdExtBb, FeatureStdExtBs]>;
 // Support generic for compatibility with other targets. The triple will be used
 // to change to the appropriate rv32/rv64 version.
 def : ProcessorModel<"generic", NoSchedModel, [FeatureStdExtBa, FeatureStdExtBb, FeatureStdExtBs]>;
